@@ -1,6 +1,6 @@
 {
   "name": "swagger-tools-with-brackets",
-  "version": "0.8.6",
+  "version": "0.8.6-1",
   "description": "Various tools for using and integrating with Swagger. [with 'brackets' support]",
   "main": "index.js",
   "scripts": {
