@@ -1,6 +1,6 @@
 {
   "name": "swagger-tools-with-brackets",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "description": "Various tools for using and integrating with Swagger. [with 'brackets' support]",
   "main": "index.js",
   "scripts": {
@@ -11,10 +11,12 @@
     "email": "jwhitlock@apache.org",
     "url": "https://github.com/whitlockjc"
   },
-  "contributors": [{
-    "name": "Dimitri del Marmol",
-    "email": "dimitri.delmarmol@gmail.com"
-  }],
+  "contributors": [
+    {
+      "name": "Dimitri del Marmol",
+      "email": "dimitri.delmarmol@gmail.com"
+    }
+  ],
   "bugs": {
     "url": "https://github.com/ddm/swagger-tools/issues"
   },
