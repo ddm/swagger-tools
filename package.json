@@ -1,6 +1,6 @@
 {
   "name": "swagger-tools-with-brackets",
-  "version": "0.8.6-2",
+  "version": "0.8.6-3",
   "description": "'swagger-tools' fork with 'brackets' support. Warning: temporary fork! Should be deprecated ASAP.",
   "main": "index.js",
   "scripts": {
