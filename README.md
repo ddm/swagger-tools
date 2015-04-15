@@ -1,5 +1,5 @@
 [![build](https://travis-ci.org/ddm/swagger-tools.svg)](https://travis-ci.org/ddm/swagger-tools)
-[![dependencies](https://david-dm.org/ddm/sswagger-tools.svg)](https://david-dm.org/ddm/swagger-tools)
+[![dependencies](https://david-dm.org/ddm/swagger-tools.svg)](https://david-dm.org/ddm/swagger-tools)
 
 This is just a fork of [https://github.com/apigee-127/swagger-tools](https://github.com/apigee-127/swagger-tools) to add
 support for the 'brackets' collectionFormat which is not officially part of the 
