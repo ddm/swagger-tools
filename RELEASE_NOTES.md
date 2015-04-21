@@ -2,11 +2,19 @@
 
 ### TBD
 
+* Fixed bug with inline schemas used for inheritance being marked as unused _(Issue #187)_
+* Fixed bug in swaggerUi middleware that did not allow an explicit `apiDocs` path for Swagger 2.0 documents _(Issue #183)_
+* Updated CLI validation to have a `--verbose` flag to output pertinent verbose information regardless of validation result _(Issue #179)_
+
+### v0.8.6 (2015-04-16)
+
 * Fixed bug with CLI not handling invalid invocations properly
 * Fixed bug with bundled parsers being called unnecessarily in middleware _(Issues #172)_
 * Fixed bug with inline schemas for Swagger 2.0 inheritance _(Issue #173)_
+* Fixed bug with middleware initialization due to upstream json-resf bug _(Issue #190)_
 * Fixed bug with validator middleware where the error object had the right message but the error stack did not _(Issue #175)_
 * Update Swagger 2.0 JSON Schema from [swagger-spec][swagger-spec] _(Issue #189)_
+* Update Swagger UI to latest _(Issue #163)_
 
 ### v0.8.5 (2015-02-20)
 
