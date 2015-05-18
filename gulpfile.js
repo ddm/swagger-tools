@@ -36,11 +36,14 @@ var istanbul = require('gulp-istanbul');
 var jshint = require('gulp-jshint');
 var mocha = require('gulp-mocha');
 var mochaPhantomJS = require('gulp-mocha-phantomjs');
+var runSequence = require('run-sequence');
 var source = require('vinyl-source-stream');
 var versions = ['1.2', '2.0'];
 var browserTestsPaths = _.reduce(versions, function (paths, version) {
   return paths.concat('./test/' + version + '/browser/');
 }, []);
+
+var runningAllTests = false;
 
 gulp.task('browserify', function (cb) {
   // Builds 4 browser binaries:
@@ -120,7 +123,7 @@ gulp.task('lint', function () {
     './bin/swagger-tools',
     './index.js',
     './lib/**/*.js',
-    'middleware/helpers.js',
+    './middleware/helpers.js',
     './middleware/swagger-*.js',
     './test/1.2/*.js',
     './test/2.0/*.js',
@@ -133,22 +136,29 @@ gulp.task('lint', function () {
     .pipe(jshint.reporter('fail'));
 });
 
-gulp.task('test-node', function () {
-  return gulp.src([
+gulp.task('test-node', function (cb) {
+  gulp.src([
     './index.js',
-    'lib/**/*.js',
-    'middleware/helpers.js',
-    'middleware/swagger-*.js',
+    './lib/**/*.js',
+    './middleware/helpers.js',
+    './middleware/swagger-*.js',
     '!./middleware/swagger-ui/**/*.js',
     '!./test/**/test-specs-browser.js'
-  ])
-    .pipe(istanbul())
+  ]).pipe(istanbul())
     .pipe(istanbul.hookRequire()) // Force `require` to return covered files
     .on('finish', function () {
       gulp.src([
-        'test/**/test-*.js',
+        './test/**/test-*.js',
         '!./test/**/test-specs-browser.js'
-      ]).pipe(mocha({reporter: 'spec'}));
+      ]).pipe(mocha({reporter: 'spec', timeout: 5000}))
+        .on('end', function () {
+          if (!runningAllTests) {
+            gulp.src([])
+              .pipe(istanbul.writeReports());
+          }
+
+          cb();
+        });
     });
 });
 
@@ -209,23 +219,28 @@ gulp.task('test-browser', ['browserify', 'test-prepare'], function (cb) {
     }, []))
     .pipe(mochaPhantomJS({
       phantomjs: {
-        settings: {
-          localToRemoteUrlAccessEnabled: true,
-          webSecurityEnabled: false
-        }
+        localToRemoteUrlAccessEnabled: true,
+        webSecurityEnabled: false,
+        ignoreResourceErrors: true
       }
     }))
-    .on('error', function (err) {
-      cb(err);
-    })
     .on('finish', function () {
+      if (runningAllTests) {
+        gulp.src([])
+          .pipe(istanbul.writeReports());
+      }
+
       // Clean up
       del(browserTestsPaths, cb);
     });
 });
 
-gulp.task('test', ['test-node', 'test-browser'], function () {
-  gulp.src([])
-    .pipe(istanbul.writeReports());
+gulp.task('test', function (cb) {
+  runningAllTests = true;
+
+  // Done this way to ensure that test-node runs prior to test-browser.  Since both of those tasks are independent,
+  // doing this 'The Gulp Way' isn't feasible.
+  runSequence('test-node', 'test-browser', cb);
 });
+
 gulp.task('default', ['lint', 'test']);

@@ -26,6 +26,9 @@
 
 var _ = require('lodash');
 var assert = require('assert');
+var cp = require('child_process')
+var fs = require('fs');
+var path = require('path');
 var swagger = require('../');
 
 var errorHandler = module.exports.errorHandler = function errorHandler() {
@@ -40,6 +43,8 @@ var errorHandler = module.exports.errorHandler = function errorHandler() {
       // console.log(err.stack);
 
       res.end(err.message);
+
+      return next();
     } else {
       return next();
     }
@@ -49,7 +54,7 @@ var errorHandler = module.exports.errorHandler = function errorHandler() {
 module.exports.createServer = function createServer (initArgs, options, callback) {
   var app = require('connect')();
   var serverInit = function (middleware) {
-    var handler = options.handler || function(req, res) {
+    var handler = options.handler || function (req, res) {
       res.end('OK');
     };
 
@@ -98,4 +103,13 @@ module.exports.expectContent = function expectContent (content, done) {
       done();
     }
   };
+};
+
+module.exports.executeCLI = function executeCLI (args, done) {
+  // Add Node args
+  args.unshift('node', path.resolve(path.join(__dirname, '..', 'bin', 'swagger-tools')));
+
+  cp.exec(args.join(' '), function (err, stdout, stderr) {
+    done(stderr, stdout);
+  });
 };
