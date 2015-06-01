@@ -238,7 +238,7 @@ describe('Swagger Validator Middleware v2.0', function () {
             .expect(200)
             .end(function (err, res) {
               if (err) {
-                throw err;
+                return callback(err);
               }
 
               helpers.expectContent('OK')(undefined, res);
@@ -250,7 +250,7 @@ describe('Swagger Validator Middleware v2.0', function () {
         index++;
       }, function (err) {
         if (err) {
-          throw err;
+          return done(err);
         }
 
         done();
@@ -329,7 +329,7 @@ describe('Swagger Validator Middleware v2.0', function () {
         index++;
       }, function (err, responses) {
         if (err) {
-          throw err;
+          return done(err);
         }
 
         _.each(responses, function (res) {
@@ -391,7 +391,7 @@ describe('Swagger Validator Middleware v2.0', function () {
         index++;
       }, function (err) {
         if (err) {
-          throw err;
+          return done(err);
         }
 
         done();
@@ -619,7 +619,7 @@ describe('Swagger Validator Middleware v2.0', function () {
             '200': {
               description: 'Valid response',
               schema: {
-                type: 'integer'
+                type: 'string'
               }
             }
           }
@@ -630,7 +630,7 @@ describe('Swagger Validator Middleware v2.0', function () {
         swaggerRouterOptions: {
           controllers: {
             'Pets_getCategoryCount': function (req, res) {
-              return res.end('1');
+              return res.end('swagger-tools');
             }
           }
         },
@@ -641,7 +641,7 @@ describe('Swagger Validator Middleware v2.0', function () {
         request(app)
           .get('/api/pets/categories/count')
           .expect(200)
-          .end(helpers.expectContent('1', done));
+          .end(helpers.expectContent('swagger-tools', done));
       });
     });
 
